@@ -1,0 +1,56 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Library/
+obj/
+
+# ============== #
+# Other Folders  #
+# ============== #
+Builds/
+AssetBundles/
+ProjectSettings/
+Compilado/
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+
+Assets/UnityVS
+Assets/UnityVS.meta
+
+# =============== #
+# Binary of Death #
+# =============== #
+*.unity3d
+*.apk
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============ #
+# Generic Shit #
+# ============ #
+Assets/Plugins/ICSharpCode.SharpZipLib.dll.rename
+Assets/Plugins/ICSharpCode.SharpZipLib.dll.rename.meta
+Assets/MissingScriptHero/Data/missingscripthero_scriptguids.xml
