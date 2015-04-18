@@ -9,7 +9,7 @@ public class PachinkoController : MonoBehaviour {
     {
         ring.GetComponent<Rigidbody2D>().velocity = Vector2.right * 2;
     }
-/**
+
     void Update()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -17,10 +17,15 @@ public class PachinkoController : MonoBehaviour {
             Instantiate(ball, ring.transform.position, Quaternion.identity);
         }
     }
-    **/
-    public void CreateBall()
+    
+    public void CreateBall(Sprite ballSprite, int indexPositionChildrenList)
     {
-        Instantiate(ball,ring.transform.position,Quaternion.identity);
+        if (ballSprite != null)
+        {
+            GameObject geBall = (GameObject)Instantiate(ball, ring.transform.position, Quaternion.identity);
+            geBall.GetComponent<BallController>().SetSprite(ballSprite);
+            geBall.GetComponent<BallController>().SetIndexPosition(indexPositionChildrenList);
+        }
     }
 
 }
