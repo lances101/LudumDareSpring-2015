@@ -46,6 +46,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Workflow\Adrian\Scripts\BallController.cs" />
+     <Compile Include="Assets\Workflow\Adrian\Scripts\HoleController.cs" />
+     <Compile Include="Assets\Workflow\Adrian\Scripts\PachinkoController.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\BoyController.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\ChildController.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\Constants.cs" />
@@ -55,7 +58,6 @@
      <None Include="Assets\Sounds\empty.txt.txt" />
      <None Include="Assets\Material\empty.txt.txt" />
      <None Include="Assets\Scripts\empty.txt.txt" />
-     <None Include="Assets\Workflow\Adrian\empty.txt.txt" />
      <None Include="Assets\Prefabs\empty.txt.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
