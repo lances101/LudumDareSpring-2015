@@ -2,20 +2,31 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-    [Header("Controllers")]
-    public LevelController levelController;
-    public GUIController guiController;
+    [Header("CONTROLLER")]
+    public GameObject[] levels;
+    private LevelController levelController;
+    private GameObject geLevel;
 
-    [Header("Sounds")]
+    public GameObject geGuiController;
+    private GUIController guiController;
+    public Utils utils;
+
+    [Header("SOUNDS")]
     private AudioSource audioSource;
     public AudioClip soundTrack;
     public AudioClip girlFX1;
 
     private bool flagPause = false;
 
+    void Awake()
+    {
+        utils = new Utils();
+    }
 	void Start () {
-        levelController = new LevelController();
-        guiController = new GUIController();
+        geLevel = levels[0];
+
+        Instantiate(geGuiController).transform.parent = this.transform;
+        guiController = geGuiController.GetComponent<GUIController>();
 	}
 
     public void PauseGameTime()
@@ -30,6 +41,13 @@ public class GameController : MonoBehaviour {
         }
 
         flagPause = !flagPause;
+    }
+
+    public void StarGame()
+    {
+        geLevel = Instantiate(geLevel.gameObject);
+        geLevel.transform.parent = this.transform;
+        levelController = geLevel.GetComponent<LevelController>();
     }
 
     private void LoadSounds()

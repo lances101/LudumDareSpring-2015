@@ -3,10 +3,11 @@ using System.Collections;
 
 public class GameInit : MonoBehaviour {
 
-    private GameObject gameController;
+    public GameObject gameController;
 	
     void Awake () {
-        gameController = new GameObject();
-        gameController.AddComponent<GameController>();
+        //gameController = new GameObject();
+        //gameController.AddComponent<GameController>();
+        Instantiate(gameController);
 	}
 }

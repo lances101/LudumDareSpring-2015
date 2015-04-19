@@ -5,9 +5,15 @@ public class LevelController : MonoBehaviour
 {
     private GameController gameController;
     private GUIController guiController;
-
+    
+    [Header("PACHINKO")]
     public GameObject pachinko;
+    private GameObject instantiatePachinko;
     private PachinkoController pachinkoController;
+
+    [Header("KINDER GARDEN")]
+    public GameObject kinderGarden;
+    private GameObject instantiateKinderGarden;
 
     [Header("CHILDREN")]
     public int minNumChildren;
@@ -32,13 +38,29 @@ public class LevelController : MonoBehaviour
     void Start()
     {
         gameController = this.transform.parent.GetComponent<GameController>();
-        guiController = this.transform.parent.FindChild("GuiController").GetComponent<GUIController>();
-        pachinkoController = pachinko.GetComponent<PachinkoController>();
+        guiController = this.transform.parent.FindChild("GUIController(Clone)").GetComponent<GUIController>();
+
+        CreateKinderGarden();
+        CreatePachinko();
     }
 
-    private void StarGame()
+    private void CreateKinderGarden()
     {
-        guiController.ActivateView(3);//Vista del juego
+        if (kinderGarden)
+            instantiateKinderGarden = Instantiate(kinderGarden);
+        else
+            Debug.Log("No encontro kinderGarden");
+    }
+
+    private void CreatePachinko()
+    {
+        instantiatePachinko = Instantiate(pachinko);
+        pachinkoController = instantiatePachinko.GetComponent<PachinkoController>();
+    }
+
+    private void LoadLevelGame()
+    {
+        guiController.ActivateView(3);
         StartCoroutine("WaitForCreateChildre", 0.5f);
     }
 
@@ -81,7 +103,7 @@ public class LevelController : MonoBehaviour
 
     private void RemoveChild(int index)
     {
-        //guiController.RemoveChildGUI(index);
+        guiController.RemoveChildGUI(index);
         RemoveChildList(index);
     }
 
@@ -99,10 +121,10 @@ public class LevelController : MonoBehaviour
         for (int i = 0; i < length; i++)
         {
             GameObject geChild = (GameObject)childrenList[i];
-            //ChildController child = geChild.GetComponent<ChildController>();
+            ChildController child = geChild.GetComponent<ChildController>();
 
-            //if (child.GetId() == idChild)
-            //    return i;
+            if (child.GetId() == idChild)
+                return i;
         }
 
         return -1;
@@ -124,16 +146,16 @@ public class LevelController : MonoBehaviour
 
     public void SendToPachinko(GameObject geChild)
     {
-        //if (geChild.GetComponent<ChildController>())
-        //{
-        //    ChildController child = geChild.GetComponent<ChildController>();
-        //    int indexPositionChildrenList = FindChildList(geChild);
-        //    CreateBall(childBall[child.GetId()], indexPositionChildrenList);
-        //    child.gameObject.SetActive(false);
-        //}
-        //else
-        //{
-        //    Debug.Log("No lo envio al pachinko!!!");
-        //}
+        if (geChild.GetComponent<ChildController>())
+        {
+            ChildController child = geChild.GetComponent<ChildController>();
+            int indexPositionChildrenList = FindChildList(geChild);
+            CreateBall(childBall[child.GetId()], indexPositionChildrenList);
+            child.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("No lo envio al pachinko!!!");
+        }
     }
 }

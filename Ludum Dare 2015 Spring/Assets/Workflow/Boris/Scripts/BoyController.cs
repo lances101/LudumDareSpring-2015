@@ -9,14 +9,11 @@ namespace Assets.Workflow.Shitfix.Scripts
 {
     class BoyController : ChildController
     {
-
-        
         override protected void Start()
         {
             base.Start();
             speedWalking = Random.Range(2, 5);
             _changingTime = DateTime.Now;
-           
         }
 
         private int _movingDirection;
@@ -32,7 +29,7 @@ namespace Assets.Workflow.Shitfix.Scripts
             {
                 SelectionIndicator.SetActive(false);
             }
-            
+
         }
 
         protected override void Update()
@@ -49,8 +46,8 @@ namespace Assets.Workflow.Shitfix.Scripts
                 Debug.Log("Random was " + r);
                 _changingTime = DateTime.Now.AddMilliseconds(Random.Range(500, 2500));
             }
-            
-            switch(_movingDirection)
+
+            switch (_movingDirection)
             {
                 case 0:
                     WalkDown();
@@ -71,8 +68,5 @@ namespace Assets.Workflow.Shitfix.Scripts
             }
 
         }
-
-
     }
-
 }

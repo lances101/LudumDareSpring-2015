@@ -64,9 +64,8 @@ public class GirlController : ChildController
         
         if(selectedBoy != null)
             selectedBoy.SetSelectedByGirl(false);
+
         selectedBoy = collider.gameObject.GetComponent<BoyController>();
         selectedBoy.SetSelectedByGirl(true);
-
-
     }
 }
