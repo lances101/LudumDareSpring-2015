@@ -122,7 +122,7 @@ public class LevelController : MonoBehaviour
             var teach = CreateGOAtPos(teacherTemplate, teacherPoints[pointRandomizer[index]]);
             teach.transform.SetParent(people.transform);
         }
-        GameObject.Find("Girl").transform.position= girlPoints[Random.Range(0, girlPoints.Length)];
+        //GameObject.Find("Girl").transform.position= girlPoints[Random.Range(0, girlPoints.Length)];
 
     }
 
