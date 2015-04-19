@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Utils : MonoBehaviour {
 
-    public int[] GetUniqueRandomInt(int count, int startRange, int endRange, List<int> forbiddenNumbers = null)
+    public static int[] GetUniqueRandomInt(int count, int startRange, int endRange, List<int> forbiddenNumbers = null)
     {
         if (endRange <= startRange)
             return null;
