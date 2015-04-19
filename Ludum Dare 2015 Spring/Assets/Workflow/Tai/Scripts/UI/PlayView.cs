@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class PlayView : MonoBehaviour
 {
     private GUIController guiController;
+    public GameObject ChildPanel;
 
     void Start()
     {
@@ -15,6 +16,11 @@ public class PlayView : MonoBehaviour
     public void MenuView()
     {
         guiController.MenuGameButton();
+    }
+
+    public void AddChild(Sprite spriteChild, int arrayPosition)
+    {
+
     }
 
 }

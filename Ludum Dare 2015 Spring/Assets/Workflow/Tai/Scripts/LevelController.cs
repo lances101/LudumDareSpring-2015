@@ -121,9 +121,9 @@ public class LevelController : MonoBehaviour
         for (int i = 0; i < length; i++)
         {
             GameObject geChild = (GameObject)childrenList[i];
-            ChildController child = geChild.GetComponent<ChildController>();
+            BoyController child = geChild.GetComponent<BoyController>();
 
-            if (child.GetId() == idChild)
+            if (child.BoyID == idChild)
                 return i;
         }
 
@@ -146,11 +146,11 @@ public class LevelController : MonoBehaviour
 
     public void SendToPachinko(GameObject geChild)
     {
-        if (geChild.GetComponent<ChildController>())
+        if (geChild.GetComponent<BoyController>())
         {
-            ChildController child = geChild.GetComponent<ChildController>();
-            int indexPositionChildrenList = FindChildList(geChild);
-            CreateBall(childBall[child.GetId()], indexPositionChildrenList);
+            BoyController child = geChild.GetComponent<BoyController>();
+            int indexPositionChildrenList = FindChildList(child.BoyID);
+            CreateBall(childBall[child.BoyID], indexPositionChildrenList);
             child.gameObject.SetActive(false);
         }
         else
