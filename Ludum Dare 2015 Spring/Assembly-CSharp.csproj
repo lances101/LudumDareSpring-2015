@@ -39,31 +39,46 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity5/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity5/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Workflow\Adrian\Scripts\BallController.cs" />
+     <Compile Include="Assets\Workflow\Adrian\Scripts\DecorateCaramellController.cs" />
      <Compile Include="Assets\Workflow\Adrian\Scripts\HoleController.cs" />
      <Compile Include="Assets\Workflow\Adrian\Scripts\PachinkoController.cs" />
+     <Compile Include="Assets\Workflow\Boris\Scripts\AnimationSpriteOverrider.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\BoyController.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\ChildController.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\Constants.cs" />
      <Compile Include="Assets\Workflow\Boris\Scripts\GirlController.cs" />
+     <Compile Include="Assets\Workflow\Boris\Scripts\LayerSorter.cs" />
+     <Compile Include="Assets\Workflow\Boris\Scripts\TeacherController.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\GUIController.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\GameController.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\GameInit.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\LevelController.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\ChildImage.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\HistoryView.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\InitView.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\LoserView.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\MenuView.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\PlayView.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\UI\WinnerView.cs" />
+     <Compile Include="Assets\Workflow\Tai\Scripts\Utils\Utils.cs" />
      <None Include="Assets\Models\empty.txt.txt" />
-     <None Include="Assets\Workflow\Tai\empty.txt.txt" />
      <None Include="Assets\Sounds\empty.txt.txt" />
      <None Include="Assets\Material\empty.txt.txt" />
      <None Include="Assets\Scripts\empty.txt.txt" />
      <None Include="Assets\Prefabs\empty.txt.txt" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
- <HintPath>D:/Program Files/Unity/Editor/Data/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ <HintPath>C:/Program Files/Unity5/Editor/Data/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
