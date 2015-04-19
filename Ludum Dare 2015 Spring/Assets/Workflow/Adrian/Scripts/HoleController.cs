@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class HoleController : MonoBehaviour {
@@ -16,5 +17,13 @@ public class HoleController : MonoBehaviour {
             levelController.NotifyPachinko(ball.GetIndexPosition, flagReturnPortal);
             Destroy(other.gameObject);
         }
+    }
+}
+
+internal class LevelController
+{
+    public void NotifyPachinko(Func<int> getIndexPosition, bool flagReturnPortal)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -59,6 +59,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Workflow\Adrian\Scripts\BallController.cs" />
+    <Compile Include="Assets\Workflow\Adrian\Scripts\HoleController.cs" />
+    <Compile Include="Assets\Workflow\Adrian\Scripts\PachinkoController.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\BoyController.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\ChildController.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\Constants.cs" />
@@ -70,7 +73,6 @@
     <None Include="Assets\Prefabs\empty.txt.txt" />
     <None Include="Assets\Scripts\empty.txt.txt" />
     <None Include="Assets\Sounds\empty.txt.txt" />
-    <None Include="Assets\Workflow\Adrian\empty.txt.txt" />
     <None Include="Assets\Workflow\Tai\empty.txt.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />

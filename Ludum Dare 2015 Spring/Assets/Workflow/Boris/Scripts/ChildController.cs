@@ -1,17 +1,19 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public abstract class ChildController : MonoBehaviour {
-
-    public float speedWalking = 4f;
-    public float stepRange = 0.5f;
-    public float lookRange = 1f;
-
-    public Vector2 position; // needs to be filled in Start() 
+public abstract class ChildController : MonoBehaviour
+{
+    public delegate void FacingUpdateAction();
 
     private int _faceDirection = 1;
-    public delegate void FacingUpdateAction();
-    public event FacingUpdateAction OnFacingChanged;
+    protected Animator animator;
+    protected BoxCollider2D boxCollider;
+    protected bool continousWalking;
+    public float lookRange = 1f;
+    public Vector2 position;
+    public float speedWalking = 4f;
+    protected UnitState state;
+    public float stepRange = 0.5f;
 
     public int FaceDirection
     {
@@ -23,107 +25,151 @@ public abstract class ChildController : MonoBehaviour {
         }
     }
 
+    public event FacingUpdateAction OnFacingChanged;
 
-    protected bool continousWalking;
-
-    protected Animator animator;
-
-    protected UnitState state;
-
-    virtual protected void Start () {
-        this.animator = GetComponent<Animator>();
+    protected virtual void Start()
+    {
+        animator = GetComponent<Animator>();
 
 
         OnFacingChanged += Turn;
-        this.position = new Vector2(transform.position.x, transform.position.y);
+        boxCollider = GetComponent<BoxCollider2D>();
+
+        position = new Vector2(transform.position.x, transform.position.y);
         state = UnitState.Idle;
     }
 
-    virtual protected void Update(){
-        if(this.state == UnitState.Walking){
-            // create direction vector basing of FaceDirection
-            Vector2 dir = Direction.ToVector2(FaceDirection);
-            Vector2 wayleft = (position + dir * stepRange) 
-                                - new Vector2(transform.position.x, transform.position.y);
+    protected virtual void Update()
+    {
+        if (state == UnitState.Walking)
+        {
+            
+            var dir = Direction.ToVector2(FaceDirection);
+            var wayleft = (position + dir*stepRange)
+                          - new Vector2(transform.position.x, transform.position.y);
 
-            Vector2 Odir = new Vector2(dir.y, -dir.x).normalized;
+            var normalizedInvertDir = new Vector2(dir.y, -dir.x).normalized;
 
-            Vector2 rayStart = new Vector2(position.x, 
-                                           position.y - stepRange*0.5f);
-            // raycasting in that direction and checking if enough freespace
-            Debug.DrawLine(rayStart, rayStart + (2*dir+Odir*0.49f).normalized);
-            Debug.DrawLine(rayStart, rayStart + (2*dir-Odir*0.49f).normalized);
-            if(hasCollision(Physics2D.RaycastAll(rayStart, (2*dir+Odir*0.49f).normalized))
-               || hasCollision(Physics2D.RaycastAll(rayStart, (2*dir-Odir*0.49f).normalized))){
-                   this.state = UnitState.Idle;
+
+            var rayStart = new Vector2(position.x,
+                position.y - stepRange*0.5f + boxCollider.size.y/2);
+            Debug.DrawLine(rayStart, rayStart + (4*dir + normalizedInvertDir*2f).normalized*3f, Color.red);
+            Debug.DrawLine(rayStart, rayStart + (4*dir - normalizedInvertDir*2f).normalized*3f, Color.red);
+            if (HasCollision(Physics2D.RaycastAll(rayStart, (4*dir + normalizedInvertDir*1f).normalized))
+                || HasCollision(Physics2D.RaycastAll(rayStart, (4*dir - normalizedInvertDir*1f).normalized)))
+            {
+                state = UnitState.Idle;
                 animator.SetBool("walking", false);
                 transform.position = new Vector3(position.x, position.y);
                 return;
             }
 
-            if(Vector2.Dot(wayleft, dir) > 0){
-                transform.Translate(dir * speedWalking * Time.deltaTime);
-            }else{
-                position += dir * stepRange;
-                if(! continousWalking){
+            if (Vector2.Dot(wayleft, dir) > 0)
+            {
+                transform.Translate(dir*speedWalking*Time.deltaTime);
+            }
+            else
+            {
+                position += dir*stepRange;
+                if (!continousWalking)
+                {
                     transform.position = new Vector3(position.x, position.y);
-                    this.state = UnitState.Idle;
+                    state = UnitState.Idle;
                 }
             }
             animator.SetBool("walking", true);
-        }else if(this.state == UnitState.Idle){
+        }
+        else if (state == UnitState.Idle)
+        {
             animator.SetBool("walking", false);
         }
     }
 
-    protected int SkipCollision(RaycastHit2D hit){
-        if(hit.collider.gameObject == this.transform.gameObject) return 0;
-        if(hit.collider.transform.IsChildOf(this.transform)) return 0;
-        if(hit.fraction > stepRange*1.3f) return 1;
+    protected int SkipCollision(RaycastHit2D hit)
+    {
+        if (hit.collider.gameObject == transform.gameObject) return 0;
+        if (hit.collider.transform.IsChildOf(transform)) return 0;
+        if (hit.collider.gameObject.tag == "MovingChild") return 0;
+        if (hit.fraction > stepRange*2f) return 1;
         return -1;
     }
 
-    virtual protected bool hasCollision(RaycastHit2D [] allhits){
-        foreach(RaycastHit2D hit in allhits){
-            int i = SkipCollision(hit);
-            if(i == 0) continue;
-            else if(i == 1) break;
+    protected Collider2D FindComponentInColliders<T>(RaycastHit2D[] allhits)
+    {
+        
+        foreach (var ray in allhits)
+        {
+            if (ray.collider.gameObject.GetComponent<T>() != null)
+            {
+                return ray.collider;
+            }
+        }
+        return null;
+    }
+    protected virtual bool HasCollision(RaycastHit2D[] allhits)
+    {
+        foreach (var hit in allhits)
+        {
+            var i = SkipCollision(hit);
+            if (i == 0) continue;
+            if (i == 1) break;
             return true;
         }
         return false;
     }
 
-    protected void Turn(){
-        if(animator.GetInteger("direction") >= 0)
+    protected void Turn()
+    {
+        if (animator.GetInteger("direction") >= 0)
             animator.SetInteger("direction", FaceDirection);
     }
 
-    private void Walk(Direction direction){
-        if(this.state == UnitState.Idle) 
+    private void Walk(Direction direction)
+    {
+        if (state == UnitState.Idle)
         {
-            this.FaceDirection = direction;
-            this.state = UnitState.Walking;
-        }else{
-            if (this.state == UnitState.Walking
-               && this.FaceDirection == direction){
-                this.continousWalking = true;
-            }
-            else this.continousWalking = false;
+            FaceDirection = direction;
+            state = UnitState.Walking;
         }
-        return;
+        else
+        {
+            if (state == UnitState.Walking
+                && FaceDirection == direction)
+            {
+                continousWalking = true;
+            }
+            else continousWalking = false;
+        }
     }
 
-    public void WalkUp() { Walk(Direction.Up); }
-    public void WalkDown() { Walk(Direction.Down); }
-    public void WalkLeft() { Walk(Direction.Left); }
-    public void WalkRight() { Walk(Direction.Right); }
-    public void stopWalking(){ continousWalking = false; }
+    public void WalkUp()
+    {
+        Walk(Direction.Up);
+    }
+
+    public void WalkDown()
+    {
+        Walk(Direction.Down);
+    }
+
+    public void WalkLeft()
+    {
+        Walk(Direction.Left);
+    }
+
+    public void WalkRight()
+    {
+        Walk(Direction.Right);
+    }
+
+    public void stopWalking()
+    {
+        continousWalking = false;
+    }
 
     protected enum UnitState
     {
-        Idle, Walking
+        Idle,
+        Walking
     }
 }
-
-
-
