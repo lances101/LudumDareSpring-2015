@@ -26,4 +26,9 @@ internal class LevelController
     {
         throw new NotImplementedException();
     }
+
+    public static void SendToPachinko(int boyId)
+    {
+        throw new NotImplementedException();
+    }
 }
