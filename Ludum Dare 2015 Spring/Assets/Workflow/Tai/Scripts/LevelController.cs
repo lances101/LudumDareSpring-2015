@@ -7,7 +7,7 @@ public class LevelController : MonoBehaviour
     private GUIController guiController;
 
     public GameObject pachinko;
-    //private PachinkoController pachinkoController;
+    private PachinkoController pachinkoController;
 
     [Header("CHILDREN")]
     public int minNumChildren;
@@ -81,7 +81,7 @@ public class LevelController : MonoBehaviour
 
     private void RemoveChild(int index)
     {
-        guiController.RemoveChildGUI(index);
+        //guiController.RemoveChildGUI(index);
         RemoveChildList(index);
     }
 
@@ -99,10 +99,10 @@ public class LevelController : MonoBehaviour
         for (int i = 0; i < length; i++)
         {
             GameObject geChild = (GameObject)childrenList[i];
-            ChildController child = geChild.GetComponent<ChildController>();
+            //ChildController child = geChild.GetComponent<ChildController>();
 
-            if (child.GetId() == idChild)
-                return i;
+            //if (child.GetId() == idChild)
+            //    return i;
         }
 
         return -1;
@@ -118,22 +118,22 @@ public class LevelController : MonoBehaviour
 
     private void ChildComeBack(int index)
     {
-        GameObject geChild = (GameObject) childrenList[index];
+        GameObject geChild = (GameObject)childrenList[index];
         geChild.gameObject.SetActive(true);
     }
 
     public void SendToPachinko(GameObject geChild)
     {
-        if (geChild.GetComponent<ChildController>())
-        {
-            ChildController child = geChild.GetComponent<ChildController>();
-            int indexPositionChildrenList = FindChildList(geChild);
-            CreateBall(childBall[child.GetId()], indexPositionChildrenList);
-            child.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("No lo envio al pachinko!!!");
-        }
+        //if (geChild.GetComponent<ChildController>())
+        //{
+        //    ChildController child = geChild.GetComponent<ChildController>();
+        //    int indexPositionChildrenList = FindChildList(geChild);
+        //    CreateBall(childBall[child.GetId()], indexPositionChildrenList);
+        //    child.gameObject.SetActive(false);
+        //}
+        //else
+        //{
+        //    Debug.Log("No lo envio al pachinko!!!");
+        //}
     }
 }
