@@ -106,6 +106,7 @@ public abstract class ChildController : MonoBehaviour
         }
         return null;
     }
+
     protected virtual bool HasCollision(RaycastHit2D[] allhits)
     {
         foreach (var hit in allhits)

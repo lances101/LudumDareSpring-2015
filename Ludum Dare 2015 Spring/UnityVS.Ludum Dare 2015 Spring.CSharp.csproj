@@ -62,10 +62,12 @@
     <Compile Include="Assets\Workflow\Adrian\Scripts\BallController.cs" />
     <Compile Include="Assets\Workflow\Adrian\Scripts\HoleController.cs" />
     <Compile Include="Assets\Workflow\Adrian\Scripts\PachinkoController.cs" />
+    <Compile Include="Assets\Workflow\Boris\Scripts\AnimationSpriteOverrider.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\BoyController.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\ChildController.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\Constants.cs" />
     <Compile Include="Assets\Workflow\Boris\Scripts\GirlController.cs" />
+    <Compile Include="Assets\Workflow\Boris\Scripts\TeacherController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Material\empty.txt.txt" />
