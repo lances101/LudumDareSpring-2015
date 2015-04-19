@@ -10,7 +10,7 @@ public class TeacherController : MonoBehaviour {
     }
     void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log("WTF");
+        
         var boy = coll.GetComponent < BoyController>();
         if (boy != null)
         {
@@ -21,7 +21,7 @@ public class TeacherController : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D coll)
     {
-        Debug.Log("WTF OUT");
+        
         var boy = coll.GetComponent<BoyController>();
         if (boy != null)
         {
