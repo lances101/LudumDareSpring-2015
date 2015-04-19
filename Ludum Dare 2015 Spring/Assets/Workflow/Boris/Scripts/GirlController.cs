@@ -7,8 +7,16 @@ public class GirlController : ChildController
 {
     private BoyController selectedBoy;
     private bool IsCapturing;
+    private LevelController levelController;
+    private GameObject geLevel;
+
     protected override void Start()
     {
+        geLevel = GameObject.Find("LevelController");
+                    
+        if(geLevel)
+            levelController = geLevel.GetComponent<LevelController>();
+
         base.Start();
     }
 
@@ -54,6 +62,14 @@ public class GirlController : ChildController
                 }
                 else
                 {
+                    if (!levelController){
+                        geLevel = GameObject.Find("LevelController");
+
+                        if (geLevel)
+                            levelController = geLevel.GetComponent<LevelController>();
+                    }
+
+                    levelController.SendToPachinko(selectedBoy.gameObject);
 
                     selectedBoy.HandleAbduction();
                     selectedBoy.SetSelectedByGirl(false);

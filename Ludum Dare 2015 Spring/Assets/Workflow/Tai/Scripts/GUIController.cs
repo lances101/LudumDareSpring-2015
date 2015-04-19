@@ -45,9 +45,9 @@ public class GUIController : MonoBehaviour {
 
     public void ActivateView(int index)
     {
-        Debug.Log("Cargar la vista = " + index);
+        //Debug.Log("Cargar la vista = " + index);
         int length = views.Count;
-        Debug.Log("Numero de vistas = " + length);
+        //Debug.Log("Numero de vistas = " + length);
 
         bool flagView = false;
 

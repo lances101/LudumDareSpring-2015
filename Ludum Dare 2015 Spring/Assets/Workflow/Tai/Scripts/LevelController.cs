@@ -54,7 +54,7 @@ public class LevelController : MonoBehaviour
 
     private void CreatePachinko()
     {
-        instantiatePachinko = Instantiate(pachinko);
+        instantiatePachinko = GameObject.Find("Pachinko"); //Instantiate(pachinko);
         pachinkoController = instantiatePachinko.GetComponent<PachinkoController>();
     }
 
@@ -69,12 +69,12 @@ public class LevelController : MonoBehaviour
         Vector3 position = arrayPosition[index].position;
         Vector2 positio2D = new Vector2(position.x, position.y);
 
-        RaycastHit2D environmentHit = Physics2D.CircleCast(positio2D, radius, Vector2.zero);//, 1, 1 << LayerMask.NameToLayer("Environment"));
+        //RaycastHit2D environmentHit = Physics2D.CircleCast(positio2D, radius, Vector2.zero);//, 1, 1 << LayerMask.NameToLayer("Environment"));
 
-        if (environmentHit)
-        {
-            CreateChild(index);
-        }
+        //if (environmentHit)
+        //{
+        //    CreateChild(index);
+        //}
 
         return (GameObject)Instantiate(childTemp, position, Quaternion.identity);
     }

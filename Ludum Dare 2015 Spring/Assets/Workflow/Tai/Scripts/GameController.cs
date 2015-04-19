@@ -47,7 +47,9 @@ public class GameController : MonoBehaviour {
     {
         geLevel = Instantiate(geLevel.gameObject);
         geLevel.transform.parent = this.transform;
+        geLevel.name = "LevelController";
         levelController = geLevel.GetComponent<LevelController>();
+
     }
 
     private void LoadSounds()
