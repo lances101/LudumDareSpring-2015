@@ -56,9 +56,7 @@ public class GirlController : ChildController
 
                 if (selectedBoy.IsWatchedByTeacher)
                 {
-                    //GAME CONTROLLER LOSE
-                    Debug.Log("YOU LOSE.. kind of");
-
+                    GameObject.Find("GameController(Clone)").GetComponent<GameController>().GameOver();
                 }
                 else
                 {

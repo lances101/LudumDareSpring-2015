@@ -40,12 +40,9 @@ class BoyController : ChildController
     public void HandleAbduction()
     {
         
-        SetSelectedByGirl(false);
-        enabled = false;
+        SetSelectedByGirl(false);        
         stopWalking();
         gameObject.SetActive(false);
-        //animator.SetTrigger("beingCaptured");
-        //StartCoroutine("EndAbduction");
         
     }
 
