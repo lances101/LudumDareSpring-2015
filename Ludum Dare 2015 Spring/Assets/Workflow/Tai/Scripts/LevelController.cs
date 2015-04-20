@@ -71,7 +71,7 @@ public class LevelController : MonoBehaviour
 
     private void LoadLevelGame()
     {
-        guiController.ActivateView(3);
+        guiController.ActivateView("PlayView");
         StartCoroutine("WaitForCreateChildre", 0.5f);
     }
 
@@ -86,7 +86,7 @@ public class LevelController : MonoBehaviour
         
         yield return new WaitForSeconds(sec);
         childrenList = new ArrayList();
-        people = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        people = new GameObject("People");
         var manager = spawnPointManager.GetComponent<SpawnpointManager>();
         var boyPoints = manager.GetBoyPoints();
         var boyIds = Utils.GetUniqueRandomInt(numChildren, 0, numChildren);
@@ -131,6 +131,7 @@ public class LevelController : MonoBehaviour
 
     private void RemoveChild(int index)
     {
+        return;
         guiController.RemoveChildGUI(index);
         RemoveChildList(index);
     }

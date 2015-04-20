@@ -10,7 +10,6 @@ public class GUIController : MonoBehaviour
     public GameObject geViews;
     private GameObject geInstantiateViews;
     private ArrayList views;
-    private int index;
 
     public int count = 0;
     public Sprite[] historySprites;
@@ -45,25 +44,23 @@ public class GUIController : MonoBehaviour
     {
         gameController = GameObject.Find("GameController(Clone)").GetComponent<GameController>();
 
-        index = 0;
-        ActivateView(index);
+        ActivateView("InitView");
     }
 
 
-    public void ActivateView(int index)
+    public void ActivateView(string name)
     {
-        //Debug.Log("Cargar la vista = " + index);
+        
         int length = views.Count;
-        //Debug.Log("Numero de vistas = " + length);
-
         bool flagView = false;
 
         for (int i = 0; i < length; i++)
         {
             GameObject geView = (GameObject)views[i];
 
-            if (index == i)
+            if (geView.name == name || (geView.name.Contains("Background") && name != "PlayView"))
             {
+                Debug.Log("Showing " +geView.name);
                 flagView = true;
             }
 
@@ -75,14 +72,12 @@ public class GUIController : MonoBehaviour
     //----------------------------------------------------------------
     public void InitGameButton()//muestra la  GUI de History
     {
-        index = 0;
-        ActivateView(index);
+        ActivateView("HistoryView");
     }
 
     public void HistoryGameButton()//muestra la  GUI de History
     {
-        index = 1;
-        ActivateView(index);
+        ActivateView("HistoryView");
     }
 
     public void StarGameButton()//muestra la  GUI de Play
@@ -90,47 +85,31 @@ public class GUIController : MonoBehaviour
         if (historyPanel && count < 2)
         {
             count++;
-            historyPanel.sprite = historySprites[count];
+            historyPanel.overrideSprite = historySprites[count];
         }
         else
         {
-            index = 2;
-            Debug.Log("index = " + index);
             count = 0;
-            ActivateView(index);
+            ActivateView("PlayView");
             gameController.StarGame();
         }
     }
 
-    public void PlayGameButton()//muestra la  GUI de Play
-    {
-        index = 3;
-        ActivateView(index);
-        gameController.StarGame();
-    }
 
     public void MenuGameButton()//muestra la  GUI de
     {
-        Debug.Log("Porque entro aqui");
-        if (index == 3)
-            index = 2;
-        else
-            index = 3;
-
-        ActivateView(index);
+        ActivateView("MenuGameView");
         gameController.PauseGameTime();
     }
 
     public void WinnerGameButton()//muestra la  GUI de Init reinician
     {
-        index = 0;
-        ActivateView(index);
+        ActivateView("WinnerGameView");
     }
 
     public void LoserGameButton()//muestra la  GUI de Init reinician
     {
-        index = 0;
-        ActivateView(index);
+        ActivateView("LoserGameView");
     }
 
     public void RemoveChildGUI(int index)
