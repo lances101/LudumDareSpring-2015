@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class LevelController : MonoBehaviour
 {
@@ -31,8 +32,8 @@ public class LevelController : MonoBehaviour
     public Sprite childBall;
     private int numChildren;
     
-    private ArrayList childrenList;
-    private ArrayList neededBoyList;
+    private List<GameObject> childrenList;
+    private List<int> neededBoyList;
     private GameObject people;
 
     private Transform[] arrayPosition;
@@ -47,8 +48,9 @@ public class LevelController : MonoBehaviour
 
     void Start()
     {
-        gameController = this.transform.parent.GetComponent<GameController>();
-        guiController = this.transform.parent.FindChild("GUIController(Clone)").GetComponent<GUIController>();
+        
+        gameController = GameController.Instance.GetComponent<GameController>();
+        guiController = gameController.guiController;
 
         CreateKinderGarden();
         CreatePachinko();
@@ -85,15 +87,16 @@ public class LevelController : MonoBehaviour
     {
         
         yield return new WaitForSeconds(sec);
-        childrenList = new ArrayList();
+        childrenList = new List<GameObject>();
         people = new GameObject("People");
+        people.transform.SetParent(transform);
         var manager = spawnPointManager.GetComponent<SpawnpointManager>();
         var boyPoints = manager.GetBoyPoints();
-        var boyIds = Utils.GetUniqueRandomInt(numChildren, 0, numChildren);
+        var boyIds = Utils.GetUniqueRandomInt(15, 0, 15);
         var teacherPoints = manager.GetTeacherPoints();
         var girlPoints = manager.GetGirlPoints();
         var neededKidsCounter = 0;
-        neededBoyList = new ArrayList();
+        neededBoyList = new List<int>();
         var pointRandomizer = Utils.GetUniqueRandomInt(numChildren, 0, boyPoints.Length);
         
         for (int index = 0; index < numChildren; index++)
@@ -104,9 +107,12 @@ public class LevelController : MonoBehaviour
             if (neededKidsCounter < kidsNeeded)
             {
                 neededBoyList.Add(boyIds[index]);
+                string spriteString = "Sprites/Boys/boy_" + boyIds[index] + "/boy_down_idle";
+                Debug.Log("Trying to load sprite from " + spriteString);
+                guiController.AddChildGUI(boyIds[index], Resources.Load<Sprite>(spriteString));
                 neededKidsCounter++;
             }
-            childrenList.Add(boyIds[index]);
+            childrenList.Add(boy);
         }
         pointRandomizer = Utils.GetUniqueRandomInt(teachersCount, 0, teacherPoints.Length);
         
@@ -124,44 +130,49 @@ public class LevelController : MonoBehaviour
         gameController.FinishLevel();
     }
 
-    private void CreateBall(Sprite childBallSprite, int indexPositionChildrenList)
+    private void CreateBall(Sprite childBallSprite, int boyID)
     {
-        pachinkoController.CreateBall(childBallSprite, indexPositionChildrenList);
+        pachinkoController.CreateBall(childBallSprite, boyID);
     }
 
-    private void RemoveChild(int index)
+    private GameObject FindNeededBoy(int boyId)
     {
-        return;
-        guiController.RemoveChildGUI(index);
-        RemoveChildList(index);
-    }
-
-    private void RemoveChildList(int index)
-    {
-        GameObject geChild = (GameObject)childrenList[index];
-        childrenList.Remove(geChild);
-        Destroy(geChild);
-    }
-
-    private int FindChildList(int idChild)
-    {
-        int length = childrenList.Count;
-
-        for (int i = 0; i < length; i++)
+        foreach (var boy in childrenList)
         {
-            GameObject geChild = (GameObject)childrenList[i];
-            BoyController child = geChild.GetComponent<BoyController>();
-
-            if (child.BoyID == idChild)
-                return i;
+            if (boy == null) continue;
+            if (boy.GetComponent<BoyController>().BoyID == boyId)
+            {
+                return boy;
+            }
         }
-
-        return -1;
+        return null;
+    }
+    private void RemoveChild(int boyID)
+    {
+        GameController.Instance.audioController.PlayGlobalFX("game_capture");
+        var voiceId = Random.Range(1, 4);
+        GameController.Instance.audioController.PlayGlobalFX("voice_girl_captured_"+voiceId);
+        guiController.RemoveChildGUI(boyID);
+        var go = FindNeededBoy(boyID);
+        if (go == null) return;
+        neededBoyList.Remove(boyID);
+        childrenList.Remove(go);
+        Destroy(go);
+        CheckWinConditions();
     }
 
+    private void CheckWinConditions()
+    {
+        Debug.Log("BOYS LEFT" + neededBoyList.Count);
+        if (neededBoyList.Count == 0)
+        {
+            gameController.FinishLevel();
+        }
+    }
     public void NotifyPachinko(int indexPosition, bool result)
     {
         if (indexPosition == -1) return;
+
         if (!result)
             RemoveChild(indexPosition);
         else
@@ -170,8 +181,9 @@ public class LevelController : MonoBehaviour
 
     private void ChildComeBack(int index)
     {
-        
-        GameObject geChild = (GameObject)childrenList[index];
+        GameController.Instance.audioController.PlayGlobalFX("game_teleport");
+        GameObject geChild = FindNeededBoy(index);
+        gameController.guiController.UpdateChildGUI(index, Resources.Load<Sprite>("Sprites/Boys/boy_" + geChild.GetComponent<BoyController>().BoyID + "/boy_down_idle"));
         geChild.gameObject.SetActive(true);
     }
 
@@ -180,10 +192,16 @@ public class LevelController : MonoBehaviour
         if (geChild.GetComponent<BoyController>())
         {
             BoyController child = geChild.GetComponent<BoyController>();
-            if(!neededBoyList.Contains(geChild.GetComponent<BoyController>().BoyID)) gameController.GameOver();
-
-            int indexPositionChildrenList = childrenList.IndexOf(child.BoyID);
-            CreateBall(childBall, indexPositionChildrenList);
+            int boyId = geChild.GetComponent<BoyController>().BoyID;
+            if (!neededBoyList.Contains(boyId))
+            {
+                GameController.Instance.audioController.PlayGlobalFX("voice_girl_idontlikeyou");
+                gameController.GameOver();
+                return;
+            }
+            guiController.UpdateChildGUI(boyId, childBall);
+            
+            CreateBall(childBall, boyId);
             child.gameObject.SetActive(false);
         }
         else

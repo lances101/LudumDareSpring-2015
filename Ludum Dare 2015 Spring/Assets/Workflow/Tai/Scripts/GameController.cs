@@ -1,33 +1,52 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class GameController : MonoBehaviour {
-    [Header("CONTROLLER")]
-    public GameObject[] levels;
-    private LevelController levelController;
-    private GameObject geLevel;
-
-    public GameObject geGuiController;
-    private GUIController guiController;
-    public Utils utils;
-
-    [Header("SOUNDS")]
-    private AudioSource audioSource;
-    public AudioClip soundTrack;
-    public AudioClip girlFX1;
-
-    private bool flagPause = false;
-
-    void Awake()
+public class GameController : MonoBehaviour
+{
+    public GameController()
     {
-        utils = new Utils();
+        GameController.Instance = this;
     }
-	void Start () {
-        geLevel = levels[0];
+    public static GameController Instance { get; private set; }
 
-        Instantiate(geGuiController).transform.parent = this.transform;
-        guiController = geGuiController.GetComponent<GUIController>();
-	}
+    [Header("Prefabs")]
+    public GameObject goAudioController;
+    public GameObject geGuiController;
+
+    [Header("CONTROLLER")]
+    public AudioController audioController;
+    public GUIController guiController;
+    public LevelController LevelController;
+
+
+    private GameObject currentLevelGO;
+    private int currentLevel = 0;
+    public bool flagPause;
+    
+    public GameObject[] levels;
+
+    private void Awake()
+    {
+        var go = Instantiate(geGuiController);
+
+        go.transform.SetParent(transform);
+
+        go = Instantiate(goAudioController);
+        go.transform.SetParent(transform);
+        audioController = go.GetComponent<AudioController>();
+    }
+
+    
+    public void GuiControllerReady(GUIController gc)
+    {
+        guiController = gc;
+        guiController.ActivateView("InitView");
+    }
+
+    public void AudioControllerReady()
+    {
+        audioController.PlayTheme("music_tiffany");
+        audioController.PlayAmbient("ambient_kids");
+    }
 
     public void PauseGameTime()
     {
@@ -43,31 +62,59 @@ public class GameController : MonoBehaviour {
         flagPause = !flagPause;
     }
 
-    public void StarGame()
+    public void ShowLevelIntro(int i)
     {
-        geLevel = Instantiate(geLevel.gameObject);
-        geLevel.transform.parent = this.transform;
-        geLevel.name = "LevelController";
-        levelController = geLevel.GetComponent<LevelController>();
-    }
+        currentLevel = i;
+        guiController.ShowLevelIntro(currentLevel);
+        DestroyObject(currentLevelGO);
+        guiController.ClearChildGUI();
+        
 
+        
+    }
+    public void ActuallyStartLevel()
+    {
+        currentLevelGO = Instantiate(levels[currentLevel]);
+        currentLevelGO.transform.parent = transform;
+        currentLevelGO.name = "LevelController";
+        LevelController = currentLevelGO.GetComponent<LevelController>();
+
+        guiController.ActivateView("PlayView");
+        audioController.PlayAmbient("ambient_kids");
+    }
     private void LoadSounds()
     {
-        //Carga los sonidos.......
     }
 
     public void GameOver()
     {
-        //Para el juego y muestra la nueva gui, he inicia la vista principal....
+        audioController.StopAmbient();
+        audioController.PlayGlobalFX("voice_girl_cry");
+        guiController.ShowGameOver();
     }
 
     public void Winner()
     {
-        //Para el juego y muestra la nueva gui, he inicia la vista principal....
+        guiController.ActivateView("WinnerGameView");
+        audioController.StopAmbient();
+        audioController.PlayGlobalFX("voice_girl_win");
+        PauseGameTime();
     }
 
     internal void FinishLevel()
     {
-        //Finaliza el nivel y carga la scena final
+        audioController.PlayGlobalFX("voice_girl_win");
+        currentLevel++;
+        if (currentLevel == levels.Length)
+        {
+            Winner();
+        }
+        else
+            ShowLevelIntro(currentLevel);
+    }
+
+    public void RestartLevel()
+    {
+        ShowLevelIntro(currentLevel);
     }
 }

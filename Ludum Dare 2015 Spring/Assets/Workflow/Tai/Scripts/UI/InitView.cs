@@ -7,12 +7,16 @@ public class InitView : MonoBehaviour {
 
 	void Start () 
     {
-        if (GameObject.Find("GUIController(Clone)"))
-            guiController = GameObject.Find("GUIController(Clone)").GetComponent<GUIController>();
+        guiController = GameController.Instance.GetComponent<GameController>().guiController;
 	}
-	
-	public void HistoryView () 
+
+    public void CreditsView()
     {
+        guiController.CreditsGameButton();
+    }
+	public void HistoryView ()
+	{
+	    
         guiController.HistoryGameButton();// vista history
 	}
 }

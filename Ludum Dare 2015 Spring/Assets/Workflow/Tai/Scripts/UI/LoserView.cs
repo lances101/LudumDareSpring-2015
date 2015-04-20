@@ -7,8 +7,7 @@ public class LoserView : MonoBehaviour
 
     void Start()
     {
-        if (GameObject.Find("GUIController(Clone)"))
-            guiController = GameObject.Find("GUIController(Clone)").GetComponent<GUIController>();
+        guiController = GameController.Instance.GetComponent<GameController>().guiController;
     }
 
     public void ChangeView()

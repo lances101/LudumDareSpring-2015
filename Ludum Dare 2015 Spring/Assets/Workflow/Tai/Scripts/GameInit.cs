@@ -8,6 +8,7 @@ public class GameInit : MonoBehaviour {
     void Awake () {
         //gameController = new GameObject();
         //gameController.AddComponent<GameController>();
-        Instantiate(gameController);
+        var gc = Instantiate(gameController); 
+        Debug.Log("GC " + gc.GetComponent<GameController>().GetHashCode());
 	}
 }

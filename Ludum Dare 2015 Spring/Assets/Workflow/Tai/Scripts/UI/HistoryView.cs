@@ -9,11 +9,9 @@ public class HistoryView : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (GameObject.Find("GUIController(Clone)"))
-        {
-            guiController = GameObject.Find("GUIController(Clone)").GetComponent<GUIController>();
+        guiController = GameController.Instance.GetComponent<GameController>().guiController;
             guiController.historyPanel = backgroundPanel;
-        }
+        
     }
 
     public void PlayView()

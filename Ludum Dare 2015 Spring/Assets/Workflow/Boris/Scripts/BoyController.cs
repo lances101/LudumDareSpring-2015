@@ -9,38 +9,29 @@ using Random = UnityEngine.Random;
 class BoyController : ChildController
 {
     public int BoyID;
-        
+    
     override protected void Start()
     {
         base.Start();
         speedWalking = Random.Range(2, 5);
         _changingTime = DateTime.Now;
-           
+        //GameObject.FindObjectOfType<GameController>().geGuiController.GetComponent<GUIController>().AddChildGUI(BoyID);
     }
 
     private int _movingDirection;
     private DateTime _changingTime;
     public bool IsWatchedByTeacher { get; set; }
     
-    public GameObject SelectionIndicator;
 
-    public void SetSelectedByGirl(bool val)
-    {
-        if (val)
-        {
-            SelectionIndicator.SetActive(true);
-        }
-        else
-        {
-            SelectionIndicator.SetActive(false);
-        }
-            
-    }
+
+   
 
     public void HandleAbduction()
     {
-        
-        SetSelectedByGirl(false);        
+
+        var voiceFileId = Random.Range(1, 4);
+        Debug.Log("PLAYING SOUND " + voiceFileId);
+        GameController.Instance.audioController.PlayGlobalFX("voice_boy_cry_" + voiceFileId); 
         stopWalking();
         gameObject.SetActive(false);
         

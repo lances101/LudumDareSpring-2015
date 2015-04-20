@@ -6,8 +6,7 @@ public class MenuView : MonoBehaviour {
 
     void Start()
     {
-        if (GameObject.Find("GUIController(Clone)"))
-            guiController = GameObject.Find("GUIController(Clone)").GetComponent<GUIController>();
+        guiController = GameController.Instance.GetComponent<GameController>().guiController;
     }
 
     public void ExitView()
@@ -17,6 +16,6 @@ public class MenuView : MonoBehaviour {
 
     public void PlayView()
     {
-        guiController.MenuGameButton();
+        guiController.ResumeGameButton();
     }
 }

@@ -21,7 +21,7 @@ public class HoleController : MonoBehaviour {
             BallController ball = other.GetComponent<BallController>();
 
             if(levelController != null)
-                levelController.NotifyPachinko(ball.GetIndexPosition(), flagReturnPortal);
+                levelController.NotifyPachinko(ball.GetBoyID(), flagReturnPortal);
 
             Destroy(other.gameObject);
         }

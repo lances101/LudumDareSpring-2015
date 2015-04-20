@@ -3,20 +3,20 @@ using System.Collections;
 
 public class BallController : MonoBehaviour {
     public SpriteRenderer spriteRenderer;
-    private int indexPositionChildrenList;
+    private int boyID = -1;
 
     public void SetSprite(Sprite ballSprite)
     {
         spriteRenderer.sprite = ballSprite;
     }
 
-    public void SetIndexPosition(int indexPositionChildrenList)
+    public void SetBoyID(int indexPositionChildrenList)
     {
-        this.indexPositionChildrenList = indexPositionChildrenList;
+        this.boyID = indexPositionChildrenList;
     }
 
-    public int GetIndexPosition()
+    public int GetBoyID()
     {
-        return this.indexPositionChildrenList;
+        return this.boyID;
     }
 }

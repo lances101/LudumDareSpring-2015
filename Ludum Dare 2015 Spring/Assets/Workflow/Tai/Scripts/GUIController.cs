@@ -9,6 +9,7 @@ public class GUIController : MonoBehaviour
     [Header("Views")]
     public GameObject geViews;
     private GameObject geInstantiateViews;
+
     private ArrayList views;
 
     public int count = 0;
@@ -16,9 +17,15 @@ public class GUIController : MonoBehaviour
 
     public Image historyPanel;
 
-    void Awake()
+    private ChildrenPanelController ChildPanelController;
+    public Image levelIntroPanel;
+
+
+    void Start()
     {
         LoadSceneViews();
+        gameController = GameController.Instance.GetComponent<GameController>();
+        gameController.GuiControllerReady(this);
     }
 
     private void LoadSceneViews()
@@ -30,21 +37,9 @@ public class GUIController : MonoBehaviour
         {
             if (item.GetComponent<RectTransform>())
             {
-                if (item.GetComponent<PlayView>())
-                {
-                    Debug.Log("PlayView");
-                }
-
                 views.Add(item.gameObject);
             }
         }
-    }
-
-    void Start()
-    {
-        gameController = GameObject.Find("GameController(Clone)").GetComponent<GameController>();
-
-        ActivateView("InitView");
     }
 
 
@@ -75,30 +70,62 @@ public class GUIController : MonoBehaviour
         ActivateView("HistoryView");
     }
 
+    public void ShowGameOver()
+    {
+        ActivateView("LoserGameView");
+    }
     public void HistoryGameButton()//muestra la  GUI de History
     {
+        GameController.Instance.audioController.PlayGlobalFX("voice_girl_cry");
         ActivateView("HistoryView");
     }
 
     public void StarGameButton()//muestra la  GUI de Play
     {
+        GameController.Instance.audioController.StopAmbient();
         if (historyPanel && count < 2)
         {
             count++;
+            if (count == 1)
+            {
+                GameController.Instance.audioController.PlayGlobalFX("history_hulla");
+            }
+            if(count == 2)
+                GameController.Instance.audioController.PlayGlobalFX("voice_girl_win");
             historyPanel.overrideSprite = historySprites[count];
         }
         else
         {
             count = 0;
             ActivateView("PlayView");
-            gameController.StarGame();
+            ChildPanelController = GameObject.Find("ChildrenPanel").GetComponent<ChildrenPanelController>();
+            gameController.ShowLevelIntro(0);
         }
     }
 
+    public void ShowLevelIntro(int level)
+    {
+        ActivateView("LevelStartView");
+        levelIntroPanel.overrideSprite = Resources.Load<Sprite>("Sprites/Days/DAY_" + (level + 1));
+        
+    }
 
+    public void GetToLevel()
+    {
+        gameController.ActuallyStartLevel();
+    }
+    public void MainMenuButton()
+    {
+        ActivateView("InitView");
+    }
     public void MenuGameButton()//muestra la  GUI de
     {
         ActivateView("MenuGameView");
+        gameController.PauseGameTime();
+    }
+    public void ResumeGameButton()//muestra la  GUI de
+    {
+        ActivateView("PlayView");
         gameController.PauseGameTime();
     }
 
@@ -109,11 +136,31 @@ public class GUIController : MonoBehaviour
 
     public void LoserGameButton()//muestra la  GUI de Init reinician
     {
-        ActivateView("LoserGameView");
+        gameController.RestartLevel();
     }
 
+    public void AddChildGUI(int index, Sprite sprite)
+    {
+        ChildPanelController.AddNewChild(index, sprite);
+    }
+
+    public void UpdateChildGUI(int index, Sprite sprite)
+    {
+        ChildPanelController.UpdateChild(index, sprite);
+    }
     public void RemoveChildGUI(int index)
     {
-        throw new System.NotImplementedException();
+        ChildPanelController.RemoveChild(index);
+    }
+
+    public void ClearChildGUI()
+    {
+        
+        ChildPanelController.ClearChildGUI();
+    }
+
+    public void CreditsGameButton()
+    {
+        ActivateView("CreditsView");
     }
 }

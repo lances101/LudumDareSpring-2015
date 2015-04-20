@@ -42,7 +42,7 @@ public class TeacherController : MonoBehaviour {
     void OnTriggerExit2D(Collider2D coll)
     {
 
-        if (coll.name.ToLower().Contains("boy") && _spriteRenderer.sprite != AngrySprite)
+        if (coll.name.ToLower().Contains("boy"))
         {
             var boy = coll.GetComponent<BoyController>();
             if (boy != null)

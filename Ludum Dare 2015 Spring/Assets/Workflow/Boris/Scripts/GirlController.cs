@@ -7,22 +7,20 @@ public class GirlController : ChildController
 {
     private BoyController selectedBoy;
     private bool IsCapturing;
-    private LevelController levelController;
-    private GameObject geLevel;
+    private GameController gameController;
+    
 
     protected override void Start()
     {
-        geLevel = GameObject.Find("LevelController");
-                    
-        if(geLevel)
-            levelController = geLevel.GetComponent<LevelController>();
-
+        gameController = GameController.Instance.GetComponent<GameController>();
         base.Start();
     }
 
     protected override void Update()
     {
         base.Update();
+        if(continousWalking && !GameController.Instance.audioController.IsFXPlaying("Walk")) 
+            GameController.Instance.audioController.PlayGlobalFX("Walk", 0.5f);
         stopWalking();
         if(selectedBoy != null)
             Debug.DrawLine(position, selectedBoy.transform.position);
@@ -41,6 +39,7 @@ public class GirlController : ChildController
         if (VerAxis < 0) WalkDown();
         if (Input.GetAxis("Jump") > 0)
         {
+            GameController.Instance.audioController.PlayGlobalFX("game_clickup");
             TryToCapture();
         }
     }
@@ -56,21 +55,16 @@ public class GirlController : ChildController
 
                 if (selectedBoy.IsWatchedByTeacher)
                 {
-                    GameObject.Find("GameController(Clone)").GetComponent<GameController>().GameOver();
+                    GameController.Instance.audioController.PlayGlobalFX("game_lose_teacher");
+                    GameController.Instance.GetComponent<GameController>().GameOver();
                 }
                 else
                 {
-                    if (!levelController){
-                        geLevel = GameObject.Find("LevelController");
 
-                        if (geLevel)
-                            levelController = geLevel.GetComponent<LevelController>();
-                    }
-
-                    levelController.SendToPachinko(selectedBoy.gameObject);
+                    GameController.Instance.audioController.PlayGlobalFX("game_teleport");
+                    gameController.LevelController.SendToPachinko(selectedBoy.gameObject);
 
                     selectedBoy.HandleAbduction();
-                    selectedBoy.SetSelectedByGirl(false);
                     selectedBoy = null;
 
                 }
@@ -98,23 +92,9 @@ public class GirlController : ChildController
             position.y - stepRange*0.5f + boxCollider.size.y/2);
         Debug.DrawLine(rayStart, rayStart + (4*dir + normalizedInvertDir*2f).normalized*1f, Color.green);
         Debug.DrawLine(rayStart, rayStart + (4*dir - normalizedInvertDir*2f).normalized*1f, Color.green);
-        var collider = FindComponentInColliders<BoyController>(Physics2D.RaycastAll(rayStart, (4*dir).normalized));
-        if (selectedBoy == collider) return;
-        
-        
-        if (collider == null)
-        {
-            if (selectedBoy != null)
-                selectedBoy.SetSelectedByGirl(false);
-            selectedBoy = null;
-            return;
-        }
-
-        
-        if(selectedBoy != null)
-            selectedBoy.SetSelectedByGirl(false);
-
-        selectedBoy = collider.gameObject.GetComponent<BoyController>();
-        selectedBoy.SetSelectedByGirl(true);
+        var localcollider = FindComponentInColliders<BoyController>(Physics2D.RaycastAll(rayStart, (4*dir).normalized));
+        if (selectedBoy == localcollider) return;
+        if (localcollider == null) return;
+        selectedBoy = localcollider.gameObject.GetComponent<BoyController>();
     }
 }
