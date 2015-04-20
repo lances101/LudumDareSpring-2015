@@ -36,7 +36,7 @@ using System.Collections.Generic;
 
 			ambientMusicSource = this.gameObject.AddComponent<AudioSource>();
 			ambientMusicSource.spatialBlend = 0.0f;
-            ambientMusicSource.volume = 0.35f;
+            ambientMusicSource.volume = 0.2f;
 			ambientMusicSource.loop = true;
             themeMusicSource = this.gameObject.AddComponent<AudioSource>();
 			themeMusicSource.spatialBlend = 0.0f;

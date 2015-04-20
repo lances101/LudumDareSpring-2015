@@ -44,8 +44,8 @@ public class GameController : MonoBehaviour
 
     public void AudioControllerReady()
     {
-        audioController.PlayTheme("music_tiffany");
-        audioController.PlayAmbient("ambient_kids");
+        audioController.PlayTheme("music_history");
+        audioController.PlayGlobalFX("music_intro");
     }
 
     public void PauseGameTime()
@@ -64,6 +64,8 @@ public class GameController : MonoBehaviour
 
     public void ShowLevelIntro(int i)
     {
+        audioController.PlayTheme("music_tiffany");
+        audioController.PlayAmbient("ambient_kids");
         currentLevel = i;
         guiController.ShowLevelIntro(currentLevel);
         DestroyObject(currentLevelGO);
@@ -80,7 +82,6 @@ public class GameController : MonoBehaviour
         LevelController = currentLevelGO.GetComponent<LevelController>();
 
         guiController.ActivateView("PlayView");
-        audioController.PlayAmbient("ambient_kids");
     }
     private void LoadSounds()
     {
@@ -97,6 +98,7 @@ public class GameController : MonoBehaviour
     {
         guiController.ActivateView("WinnerGameView");
         audioController.StopAmbient();
+        audioController.PlayTheme("history_teaparty");
         audioController.PlayGlobalFX("voice_girl_win");
         PauseGameTime();
     }
