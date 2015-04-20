@@ -17,6 +17,7 @@ public class LevelController : MonoBehaviour
 
     [Header("UNITS PREFS")]
     public int minNumChildren;
+    public int kidsNeeded;
     public int maxNumChildren;
     public int teachersCount;
     
@@ -31,6 +32,7 @@ public class LevelController : MonoBehaviour
     private int numChildren;
     
     private ArrayList childrenList;
+    private ArrayList neededBoyList;
     private GameObject people;
 
     private Transform[] arrayPosition;
@@ -78,22 +80,7 @@ public class LevelController : MonoBehaviour
         return (GameObject) Instantiate(go, pos, Quaternion.identity);
         
     }
-    private GameObject CreateChild(int index)
-    {
-        Vector3 position = arrayPosition[index].position;
-        Vector2 positio2D = new Vector2(position.x, position.y);
-
-        
-        //RaycastHit2D environmentHit = Physics2D.CircleCast(positio2D, radius, Vector2.zero);//, 1, 1 << LayerMask.NameToLayer("Environment"));
-
-        //if (environmentHit)
-        //{
-        //    CreateChild(index);
-        //}
-
-        return (GameObject)Instantiate(boyTemplate, position, Quaternion.identity);
-    }
-
+    
     IEnumerator WaitForCreateChildre(float sec)
     {
         
@@ -105,7 +92,8 @@ public class LevelController : MonoBehaviour
         var boyIds = Utils.GetUniqueRandomInt(numChildren, 0, numChildren);
         var teacherPoints = manager.GetTeacherPoints();
         var girlPoints = manager.GetGirlPoints();
-
+        var neededKidsCounter = 0;
+        neededBoyList = new ArrayList();
         var pointRandomizer = Utils.GetUniqueRandomInt(numChildren, 0, boyPoints.Length);
         
         for (int index = 0; index < numChildren; index++)
@@ -113,6 +101,11 @@ public class LevelController : MonoBehaviour
             var boy = CreateGOAtPos(boyTemplate, boyPoints[pointRandomizer[index]]);
             boy.GetComponent<BoyController>().BoyID = boyIds[index];
             boy.transform.SetParent(people.transform);
+            if (neededKidsCounter < kidsNeeded)
+            {
+                neededBoyList.Add(boyIds[index]);
+                neededKidsCounter++;
+            }
             childrenList.Add(boyIds[index]);
         }
         pointRandomizer = Utils.GetUniqueRandomInt(teachersCount, 0, teacherPoints.Length);
@@ -122,8 +115,7 @@ public class LevelController : MonoBehaviour
             var teach = CreateGOAtPos(teacherTemplate, teacherPoints[pointRandomizer[index]]);
             teach.transform.SetParent(people.transform);
         }
-        //GameObject.Find("Girl").transform.position= girlPoints[Random.Range(0, girlPoints.Length)];
-
+        
     }
 
     IEnumerator WaitForFinishLevel(float sec)
@@ -168,7 +160,8 @@ public class LevelController : MonoBehaviour
 
     public void NotifyPachinko(int indexPosition, bool result)
     {
-        if (result)
+        if (indexPosition == -1) return;
+        if (!result)
             RemoveChild(indexPosition);
         else
             ChildComeBack(indexPosition);
@@ -176,6 +169,7 @@ public class LevelController : MonoBehaviour
 
     private void ChildComeBack(int index)
     {
+        
         GameObject geChild = (GameObject)childrenList[index];
         geChild.gameObject.SetActive(true);
     }
@@ -185,7 +179,8 @@ public class LevelController : MonoBehaviour
         if (geChild.GetComponent<BoyController>())
         {
             BoyController child = geChild.GetComponent<BoyController>();
-            //int indexPositionChildrenList = FindChildList(child.BoyID);
+            if(!neededBoyList.Contains(geChild.GetComponent<BoyController>().BoyID)) gameController.GameOver();
+
             int indexPositionChildrenList = childrenList.IndexOf(child.BoyID);
             CreateBall(childBall, indexPositionChildrenList);
             child.gameObject.SetActive(false);

@@ -9,12 +9,13 @@ public class HoleController : MonoBehaviour {
 
     void Start()
     {
-        if (GameObject.Find("LevelController") != null)
-            levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
+        
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (GameObject.Find("LevelController") != null)
+            levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
         if (other.GetComponent<BallController>())
         {
             BallController ball = other.GetComponent<BallController>();
