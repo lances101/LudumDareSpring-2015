@@ -81,7 +81,7 @@ class BoyController : ChildController
             case 2:
                 WalkRight();
                 break;
-
+                 
             case 3:
                 WalkUp();
                 break;

@@ -6,17 +6,20 @@ public class AnimationSpriteOverrider : MonoBehaviour
 {
 
     public Sprite[] overridingSprites;
+    private BoyController boy;
 	// Use this for initialization
 	void Start ()
 	{
-	    overridingSprites = Resources.LoadAll<Sprite>(path);
+        boy = GetComponent<BoyController>();
+	    overridingSprites = Resources.LoadAll<Sprite>(path+boy.BoyID);
+	    
 	}
 
     public string path;
 	// Update is called once per frame
 	void LateUpdate ()
 	{
-
+        
 	    foreach (var renderer in GetComponents<SpriteRenderer>())
 	    {
 	        string spriteName = renderer.sprite.name;

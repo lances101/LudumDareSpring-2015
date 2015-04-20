@@ -5,7 +5,7 @@ public abstract class ChildController : MonoBehaviour
 {
     public delegate void FacingUpdateAction();
 
-    private int _faceDirection = 1;
+    private int _faceDirection = 3;
     protected Animator animator;
     protected BoxCollider2D boxCollider;
     protected bool continousWalking;
