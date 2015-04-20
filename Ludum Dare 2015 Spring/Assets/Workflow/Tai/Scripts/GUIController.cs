@@ -2,15 +2,21 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class GUIController : MonoBehaviour {
+public class GUIController : MonoBehaviour
+{
     private GameController gameController;
-    
+
     [Header("Views")]
     public GameObject geViews;
     private GameObject geInstantiateViews;
     private ArrayList views;
     private int index;
-    
+
+    public int count = 0;
+    public Sprite[] historySprites;
+
+    public Image historyPanel;
+
     void Awake()
     {
         LoadSceneViews();
@@ -35,13 +41,14 @@ public class GUIController : MonoBehaviour {
         }
     }
 
-	void Start () {
+    void Start()
+    {
         gameController = GameObject.Find("GameController(Clone)").GetComponent<GameController>();
 
         index = 0;
         ActivateView(index);
-	}
-	
+    }
+
 
     public void ActivateView(int index)
     {
@@ -64,7 +71,7 @@ public class GUIController : MonoBehaviour {
 
             flagView = false;
         }
-	}
+    }
     //----------------------------------------------------------------
     public void InitGameButton()//muestra la  GUI de History
     {
@@ -80,9 +87,19 @@ public class GUIController : MonoBehaviour {
 
     public void StarGameButton()//muestra la  GUI de Play
     {
-        index = 2;
-        ActivateView(index);
-        gameController.StarGame();
+        if (historyPanel && count < 2)
+        {
+            count++;
+            historyPanel.sprite = historySprites[count];
+        }
+        else
+        {
+            index = 2;
+            Debug.Log("index = " + index);
+            count = 0;
+            ActivateView(index);
+            gameController.StarGame();
+        }
     }
 
     public void PlayGameButton()//muestra la  GUI de Play
@@ -94,6 +111,7 @@ public class GUIController : MonoBehaviour {
 
     public void MenuGameButton()//muestra la  GUI de
     {
+        Debug.Log("Porque entro aqui");
         if (index == 3)
             index = 2;
         else
