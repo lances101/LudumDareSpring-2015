@@ -20,7 +20,7 @@ public class GirlController : ChildController
     {
         base.Update();
         if(continousWalking && !GameController.Instance.audioController.IsFXPlaying("Walk")) 
-            GameController.Instance.audioController.PlayGlobalFX("Walk", 0.5f);
+            GameController.Instance.audioController.PlayGlobalFX("Walk", 0.1f);
         stopWalking();
         if(selectedBoy != null)
             Debug.DrawLine(position, selectedBoy.transform.position);
@@ -39,7 +39,7 @@ public class GirlController : ChildController
         if (VerAxis < 0) WalkDown();
         if (Input.GetAxis("Jump") > 0)
         {
-            GameController.Instance.audioController.PlayGlobalFX("game_clickup");
+            GameController.Instance.audioController.PlayGlobalFX("game_hoop");
             TryToCapture();
         }
     }
@@ -61,7 +61,7 @@ public class GirlController : ChildController
                 else
                 {
 
-                    GameController.Instance.audioController.PlayGlobalFX("game_teleport");
+                    
                     gameController.LevelController.SendToPachinko(selectedBoy.gameObject);
 
                     selectedBoy.HandleAbduction();

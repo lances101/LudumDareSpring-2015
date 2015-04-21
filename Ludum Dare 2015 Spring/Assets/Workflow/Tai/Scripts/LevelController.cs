@@ -73,7 +73,6 @@ public class LevelController : MonoBehaviour
 
     private void LoadLevelGame()
     {
-        guiController.ActivateView("PlayView");
         StartCoroutine("WaitForCreateChildre", 0.5f);
     }
 
@@ -199,8 +198,11 @@ public class LevelController : MonoBehaviour
                 gameController.GameOver();
                 return;
             }
-            guiController.UpdateChildGUI(boyId, childBall);
-            
+
+            var boyVoiceFileId = Random.Range(1, 4);
+            GameController.Instance.audioController.PlayGlobalFX("voice_boy_cry_" + boyVoiceFileId); 
+            GameController.Instance.audioController.PlayGlobalFX("game_teleport");
+            guiController.UpdateChildGUI(boyId, childBall);            
             CreateBall(childBall, boyId);
             child.gameObject.SetActive(false);
         }

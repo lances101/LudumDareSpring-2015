@@ -162,4 +162,9 @@ using System.Collections.Generic;
 
             return outValue;
 	    }
+
+	    public void StopTheme()
+	    {
+	        themeMusicSource.Stop();
+	    }
 	}

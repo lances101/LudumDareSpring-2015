@@ -28,10 +28,6 @@ class BoyController : ChildController
 
     public void HandleAbduction()
     {
-
-        var voiceFileId = Random.Range(1, 4);
-        Debug.Log("PLAYING SOUND " + voiceFileId);
-        GameController.Instance.audioController.PlayGlobalFX("voice_boy_cry_" + voiceFileId); 
         stopWalking();
         gameObject.SetActive(false);
         

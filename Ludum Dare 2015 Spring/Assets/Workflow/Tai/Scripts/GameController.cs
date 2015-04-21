@@ -20,7 +20,6 @@ public class GameController : MonoBehaviour
 
     private GameObject currentLevelGO;
     private int currentLevel = 0;
-    public bool flagPause;
     
     public GameObject[] levels;
 
@@ -44,13 +43,13 @@ public class GameController : MonoBehaviour
 
     public void AudioControllerReady()
     {
-        audioController.PlayTheme("music_history");
+        
         audioController.PlayGlobalFX("music_intro");
     }
 
-    public void PauseGameTime()
+    public void PauseGame(bool shouldPause)
     {
-        if (!flagPause)
+        if (shouldPause)
         {
             Time.timeScale = 0;
         }
@@ -58,39 +57,34 @@ public class GameController : MonoBehaviour
         {
             Time.timeScale = 1;
         }
-
-        flagPause = !flagPause;
     }
 
     public void ShowLevelIntro(int i)
     {
+        PauseGame(false);
+        DestroyObject(currentLevelGO);
+        guiController.ClearChildGUI();
         audioController.PlayTheme("music_tiffany");
         audioController.PlayAmbient("ambient_kids");
         currentLevel = i;
+        currentLevelGO = Instantiate(levels[currentLevel]);
+        currentLevelGO.transform.parent = transform;
+        currentLevelGO.name = "LevelController";
+        LevelController = currentLevelGO.GetComponent<LevelController>();
         guiController.ShowLevelIntro(currentLevel);
-        DestroyObject(currentLevelGO);
-        guiController.ClearChildGUI();
-        
 
         
     }
     public void ActuallyStartLevel()
     {
-        currentLevelGO = Instantiate(levels[currentLevel]);
-        currentLevelGO.transform.parent = transform;
-        currentLevelGO.name = "LevelController";
-        LevelController = currentLevelGO.GetComponent<LevelController>();
-
+        
         guiController.ActivateView("PlayView");
+        
     }
-    private void LoadSounds()
-    {
-    }
-
     public void GameOver()
     {
+        PauseGame(true);
         audioController.StopAmbient();
-        audioController.PlayGlobalFX("voice_girl_cry");
         guiController.ShowGameOver();
     }
 
@@ -100,7 +94,7 @@ public class GameController : MonoBehaviour
         audioController.StopAmbient();
         audioController.PlayTheme("history_teaparty");
         audioController.PlayGlobalFX("voice_girl_win");
-        PauseGameTime();
+        
     }
 
     internal void FinishLevel()
@@ -113,6 +107,7 @@ public class GameController : MonoBehaviour
         }
         else
             ShowLevelIntro(currentLevel);
+        PauseGame(true);
     }
 
     public void RestartLevel()

@@ -65,9 +65,12 @@ public class GUIController : MonoBehaviour
         }
     }
     //----------------------------------------------------------------
-    public void InitGameButton()//muestra la  GUI de History
+    public void InitGameButton()
     {
-        ActivateView("HistoryView");
+        GameController.Instance.audioController.StopAmbient();
+        GameController.Instance.audioController.StopTheme();
+        GameController.Instance.audioController.PlayGlobalFX("music_intro");
+        ActivateView("InitView");
     }
 
     public void ShowGameOver()
@@ -76,6 +79,7 @@ public class GUIController : MonoBehaviour
     }
     public void HistoryGameButton()//muestra la  GUI de History
     {
+        GameController.Instance.audioController.PlayTheme("music_history");
         GameController.Instance.audioController.PlayGlobalFX("voice_girl_cry");
         ActivateView("HistoryView");
     }
@@ -121,12 +125,12 @@ public class GUIController : MonoBehaviour
     public void MenuGameButton()//muestra la  GUI de
     {
         ActivateView("MenuGameView");
-        gameController.PauseGameTime();
+        gameController.PauseGame(true);
     }
     public void ResumeGameButton()//muestra la  GUI de
     {
         ActivateView("PlayView");
-        gameController.PauseGameTime();
+        gameController.PauseGame(false);
     }
 
     public void WinnerGameButton()//muestra la  GUI de Init reinician
